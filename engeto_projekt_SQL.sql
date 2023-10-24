@@ -77,6 +77,7 @@ WHERE cp.value_type_code = '5958'
 	AND payroll_year = '2006';
 
 -- spojím price s name of category
+-- ??!! ještě zprůměruj na roční ceny
 SELECT 
 	cp.category_code,
 	cpc.name AS name_category,
@@ -89,15 +90,52 @@ JOIN czechia_price_category cpc
 ORDER BY cp.category_code, date_from;
 
 -- spojím payroll s name of industry_branch -- pozor musíš omezit na roky 2006 -2018
--- ??? není dokončeno
-SELECT *
+-- czechia_payroll: 19 branch * 13 let * 4 roční období = 988 řádků / odstranila jsem NULL hodnoty
+
+SELECT
+	cp.industry_branch_code,
+	cp.value,
+	cp.payroll_year,
+	cp.payroll_quarter 
 FROM czechia_payroll cp 
-WHERE value_type_code = 5958
-	AND unit_code = 200
-	AND calculation_code = 200
-	AND industry_branch_code = 'A'
+WHERE cp.value_type_code = 5958
+	AND cp.unit_code = 200
+	AND cp.calculation_code = 200
+	AND cp.industry_branch_code IS NOT NULL
 	AND payroll_year BETWEEN 2006 AND 2018
-ORDER BY payroll_year, payroll_quarter 
+ORDER BY cp.industry_branch_code, cp.payroll_year, cp.payroll_quarter -- 988 řádků
+
+-- musím ověřit, zda jsou pro každý branch všechny hodnoty?
+SELECT
+	cp.industry_branch_code,
+	cp.value,
+	cp.payroll_year,
+	cp.payroll_quarter 
+FROM czechia_payroll cp 
+WHERE cp.value_type_code = 5958
+	AND cp.unit_code = 200
+	AND cp.calculation_code = 200
+	AND cp.payroll_year BETWEEN 2006 AND 2018
+	AND cp.industry_branch_code = 'S'
+ORDER BY cp.industry_branch_code, cp.payroll_year, cp.payroll_quarter;
+
+-- kontrola průměrného platu pro kategorii a rok, 19 branch * 13 let = 247 řádků 
+-- czechia_payroll: vytvořím průměry za rok 
+-- spojím s payroll kvůli názvu odvětví
+SELECT
+	cp.industry_branch_code,
+	cpib.name,
+	avg(cp.value) AS avg_year_payroll,
+	cp.payroll_year
+FROM czechia_payroll cp
+JOIN czechia_payroll_industry_branch cpib 
+	ON cp.industry_branch_code = cpib.code
+WHERE cp.value_type_code = 5958
+	AND cp.unit_code = 200
+	AND cp.calculation_code = 200
+	AND cp.payroll_year BETWEEN 2006 AND 2018
+	AND cp.industry_branch_code IS NOT NULL
+GROUP BY cp.industry_branch_code, cp.payroll_year;
 
 -- zjištění jaká je délka jednotlivého měření u potravin
 SELECT
