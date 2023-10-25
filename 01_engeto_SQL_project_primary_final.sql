@@ -76,20 +76,22 @@ WHERE cp.value_type_code = '5958'
 	AND industry_branch_code = 'A'
 	AND payroll_year = '2006';
 
--- spojím price s name of category
--- ??!! ještě zprůměruj na roční ceny
+-- OK FINAL TABLE PRICE for JOIN
+-- spojím price s name of category 27 categories * 13 years = 351 rows
+-- je o 9 řádků míň,protože u vína probíhalo měření pouze v letech 2015-2018 = 342 rows
+-- zprůměruj na roční ceny
 SELECT 
 	cp.category_code,
 	cpc.name AS name_category,
-	cp.value AS value_category,
-	date_format(cp.date_from, '%Y-%m-%d') AS date_from,
-	date_format(cp.date_to, '%Y-%m-%d') AS date_to
-FROM czechia_price cp 
+	round(avg(cp.value),2) AS value_category,
+	year(cp.date_from) AS price_year
+	FROM czechia_price cp 
 JOIN czechia_price_category cpc 
 	ON cp.category_code = cpc.code
+GROUP BY cp.category_code, year(cp.date_from)
 ORDER BY cp.category_code, date_from;
 
--- !! FINAL TABLE PAYROLL for JOIN
+-- OK FINAL TABLE PAYROLL for JOIN
 -- spojím payroll s name of industry_branch -- pozor musíš omezit na roky 2006 -2018
 -- czechia_payroll: 19 branch * 13 let * 4 roční období = 988 řádků / odstranila jsem NULL hodnoty
 -- zprůměruj na roční výplaty = 19 branch * 13 let = 247 řádků
