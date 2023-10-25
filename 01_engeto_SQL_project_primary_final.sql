@@ -89,21 +89,27 @@ JOIN czechia_price_category cpc
 	ON cp.category_code = cpc.code
 ORDER BY cp.category_code, date_from;
 
+-- !! FINAL TABLE PAYROLL for JOIN
 -- spojím payroll s name of industry_branch -- pozor musíš omezit na roky 2006 -2018
 -- czechia_payroll: 19 branch * 13 let * 4 roční období = 988 řádků / odstranila jsem NULL hodnoty
+-- zprůměruj na roční výplaty = 19 branch * 13 let = 247 řádků
+-- připoj název industry_branch_code
 
 SELECT
-	cp.industry_branch_code,
-	cp.value,
-	cp.payroll_year,
-	cp.payroll_quarter 
-FROM czechia_payroll cp 
+	cp.industry_branch_code AS ip_code,
+	cpib.name AS ip_name,
+	round(avg(cp.value),2) AS avg_payroll_year,
+	cp.payroll_year
+FROM czechia_payroll cp
+JOIN czechia_payroll_industry_branch cpib 
+	ON cp.industry_branch_code = cpib.code
 WHERE cp.value_type_code = 5958
 	AND cp.unit_code = 200
 	AND cp.calculation_code = 200
 	AND cp.industry_branch_code IS NOT NULL
-	AND payroll_year BETWEEN 2006 AND 2018
-ORDER BY cp.industry_branch_code, cp.payroll_year, cp.payroll_quarter -- 988 řádků
+	AND cp.payroll_year BETWEEN 2006 AND 2018
+GROUP BY ip_code, cp.payroll_year 
+ORDER BY ip_code, cp.payroll_year
 
 -- musím ověřit, zda jsou pro každý branch všechny hodnoty?
 SELECT
