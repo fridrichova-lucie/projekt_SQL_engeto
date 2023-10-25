@@ -81,15 +81,15 @@ WHERE cp.value_type_code = '5958'
 -- je o 9 řádků míň,protože u vína probíhalo měření pouze v letech 2015-2018 = 342 rows
 -- zprůměruj na roční ceny
 SELECT 
-	cp.category_code,
+	cpe.category_code,
 	cpc.name AS name_category,
-	round(avg(cp.value),2) AS value_category,
-	year(cp.date_from) AS price_year
-	FROM czechia_price cp 
+	round(avg(cpe.value),2) AS value_price,
+	year(cpe.date_from) AS price_year
+	FROM czechia_price cpe 
 JOIN czechia_price_category cpc 
-	ON cp.category_code = cpc.code
-GROUP BY cp.category_code, year(cp.date_from)
-ORDER BY cp.category_code, date_from;
+	ON cpe.category_code = cpc.code
+GROUP BY cpe.category_code, year(cpe.date_from)
+ORDER BY cpe.category_code, date_from;
 
 -- OK FINAL TABLE PAYROLL for JOIN
 -- spojím payroll s name of industry_branch -- pozor musíš omezit na roky 2006 -2018
@@ -98,20 +98,20 @@ ORDER BY cp.category_code, date_from;
 -- připoj název industry_branch_code
 
 SELECT
-	cp.industry_branch_code AS ip_code,
+	cpl.industry_branch_code AS ip_code,
 	cpib.name AS ip_name,
-	round(avg(cp.value),2) AS avg_payroll_year,
-	cp.payroll_year
-FROM czechia_payroll cp
+	round(avg(cpl.value),2) AS avg_payroll_year,
+	cpl.payroll_year
+FROM czechia_payroll cpl
 JOIN czechia_payroll_industry_branch cpib 
-	ON cp.industry_branch_code = cpib.code
-WHERE cp.value_type_code = 5958
-	AND cp.unit_code = 200
-	AND cp.calculation_code = 200
-	AND cp.industry_branch_code IS NOT NULL
-	AND cp.payroll_year BETWEEN 2006 AND 2018
-GROUP BY ip_code, cp.payroll_year 
-ORDER BY ip_code, cp.payroll_year
+	ON cpl.industry_branch_code = cpib.code
+WHERE cpl.value_type_code = 5958
+	AND cpl.unit_code = 200
+	AND cpl.calculation_code = 200
+	AND cpl.industry_branch_code IS NOT NULL
+	AND cpl.payroll_year BETWEEN 2006 AND 2018
+GROUP BY ip_code, cpl.payroll_year 
+ORDER BY ip_code, cpl.payroll_year
 
 -- musím ověřit, zda jsou pro každý branch všechny hodnoty?
 SELECT
