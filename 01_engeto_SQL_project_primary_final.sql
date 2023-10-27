@@ -1,3 +1,30 @@
+-- Finální příkaz pro vytvoření tabulky
+
+CREATE OR REPLACE TABLE t_lucie_fridrichova_project_sql_primary_final AS  
+	SELECT
+		cpl.industry_branch_code AS ib_code,
+		cpib.name AS ib_name,
+		round(avg(cpl.value),2) AS avg_payroll_year,
+		cpl.payroll_year, 
+		cpe.category_code,
+		cpc.name AS category_name,
+		round(avg(cpe.value),2) AS value_price
+	FROM czechia_payroll cpl
+	JOIN czechia_price cpe 
+		ON cpl.payroll_year = year(cpe.date_from)
+	JOIN czechia_payroll_industry_branch cpib 
+		ON cpl.industry_branch_code = cpib.code 
+	JOIN czechia_price_category cpc 
+		ON cpe.category_code = cpc.code 
+	WHERE cpl.value_type_code = 5958
+		AND cpl.unit_code = 200
+		AND cpl.calculation_code = 200
+		AND cpl.industry_branch_code IS NOT NULL
+		AND cpl.payroll_year BETWEEN 2006 AND 2018
+	GROUP BY ib_code, cpl.payroll_year, cpe.category_code, year(cpe.date_from)
+	ORDER BY ib_code, cpl.payroll_year, cpe.category_code, date_from;
+
+-- MYŠLENKOVÉ POCHODY :)
 -- Zjišťování časového období
 -- czechia_payroll: v payroll_year a payroll_quarter nějaká hodnota nulová?
 SELECT *
@@ -76,7 +103,7 @@ WHERE cp.value_type_code = '5958'
 	AND industry_branch_code = 'A'
 	AND payroll_year = '2006';
 
--- OK FINAL TABLE PRICE for JOIN
+-- jak spojit TABLE PRICE a CATEGORY CODE
 -- spojím price s name of category 27 categories * 13 years = 351 rows
 -- je o 9 řádků míň,protože u vína probíhalo měření pouze v letech 2015-2018 = 342 rows
 -- zprůměruj na roční ceny
@@ -91,7 +118,7 @@ JOIN czechia_price_category cpc
 GROUP BY cpe.category_code, year(cpe.date_from)
 ORDER BY cpe.category_code, date_from;
 
--- OK FINAL TABLE PAYROLL for JOIN
+-- jak spojit TABLE PAYROLL a INDUSTRY_BRANCH
 -- spojím payroll s name of industry_branch -- pozor musíš omezit na roky 2006 -2018
 -- czechia_payroll: 19 branch * 13 let * 4 roční období = 988 řádků / odstranila jsem NULL hodnoty
 -- zprůměruj na roční výplaty = 19 branch * 13 let = 247 řádků
