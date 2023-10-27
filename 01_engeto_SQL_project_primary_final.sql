@@ -5,7 +5,7 @@ CREATE OR REPLACE TABLE t_lucie_fridrichova_project_sql_primary_final AS
 		cpl.industry_branch_code AS ib_code,
 		cpib.name AS ib_name,
 		round(avg(cpl.value),2) AS avg_payroll_year,
-		cpl.payroll_year, 
+		cpl.payroll_year AS in_year, 
 		cpe.category_code,
 		cpc.name AS category_name,
 		round(avg(cpe.value),2) AS value_price
