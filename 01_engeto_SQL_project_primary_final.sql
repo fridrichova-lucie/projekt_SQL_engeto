@@ -1,6 +1,6 @@
 -- Finální příkaz pro vytvoření tabulky
 
-CREATE OR REPLACE TABLE t_lucie_fridrichova_project_sql_primary_final AS  
+CREATE OR REPLACE TABLE t_lucie_fridrichova_project_sql_primary_final AS
 	SELECT
 		cpl.industry_branch_code AS ib_code,
 		cpib.name AS ib_name,
