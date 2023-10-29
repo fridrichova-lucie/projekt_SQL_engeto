@@ -12,8 +12,8 @@ SELECT
 	in_year,
 	category_name,
 	round(avg(avg_payroll_year),0) AS avg_all_payroll,
-	value_price,
-	round(avg_payroll_year / value_price,0) AS how_many
+	avg_price_year,
+	round(avg_payroll_year / avg_price_year,0) AS how_many
 FROM t_lucie_fridrichova_project_sql_primary_final tlfpspf
 WHERE in_year IN ('2006', '2018')
 	AND category_code IN ('114201', '111301')
