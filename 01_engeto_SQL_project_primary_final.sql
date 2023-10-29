@@ -8,7 +8,7 @@ CREATE OR REPLACE TABLE t_lucie_fridrichova_project_sql_primary_final AS
 		cpl.payroll_year AS in_year, 
 		cpe.category_code,
 		cpc.name AS category_name,
-		round(avg(cpe.value),2) AS value_price
+		round(avg(cpe.value),2) AS avg_price_year
 	FROM czechia_payroll cpl
 	JOIN czechia_price cpe 
 		ON cpl.payroll_year = year(cpe.date_from)
