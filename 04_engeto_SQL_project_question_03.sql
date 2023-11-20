@@ -5,10 +5,10 @@
 SELECT DISTINCT 
 	pf.category_code
 	, pf.category_name
-	, round(avg(round(pf2.avg_price_year / pf.avg_price_year *100 -100,2)),2) AS avg_percentage
+	, round(avg(round(pf2.avg_price_year / pf.avg_price_year *100 - 100,2)),2) AS avg_percentage
 FROM t_lucie_fridrichova_project_sql_primary_final pf
 JOIN t_lucie_fridrichova_project_sql_primary_final pf2
-	ON pf.in_year = pf2.in_year -1
+	ON pf.in_year = pf2.in_year - 1
 	AND pf.category_code = pf2.category_code
 GROUP BY pf.category_code
 ORDER BY avg_percentage

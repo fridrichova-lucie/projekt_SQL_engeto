@@ -6,12 +6,12 @@
 SELECT DISTINCT 
 	pf.in_year
 	, pf2.in_year AS in_year_next
-	, ROUND(AVG(pf2.avg_price_year) / AVG(pf.avg_price_year) *100 -100,2) AS price_percentage
-	, ROUND(AVG(pf2.avg_payroll_year) / AVG(pf.avg_payroll_year) *100 -100,2) AS payroll_percentage
-	, ROUND(AVG(pf2.avg_payroll_year) / AVG(pf.avg_payroll_year) *100 -100,2) - ROUND(AVG(pf2.avg_price_year) / AVG(pf.avg_price_year) *100 -100,2) AS different
+	, round(avg(pf2.avg_price_year) / avg(pf.avg_price_year) * 100 - 100,2) AS price_percentage
+	, round(avg(pf2.avg_payroll_year) / avg(pf.avg_payroll_year) * 100 - 100,2) AS payroll_percentage
+	, ROUND(AVG(pf2.avg_payroll_year) / AVG(pf.avg_payroll_year) * 100 - 100,2) - round(avg(pf2.avg_price_year) / avg(pf.avg_price_year) * 100 - 100,2) AS different
 FROM t_lucie_fridrichova_project_sql_primary_final pf 
 JOIN t_lucie_fridrichova_project_sql_primary_final pf2
-	ON pf.in_year = pf2.in_year -1
+	ON pf.in_year = pf2.in_year - 1
 	AND pf.category_code = pf2.category_code
 GROUP BY pf.in_year;
 
@@ -19,14 +19,14 @@ GROUP BY pf.in_year;
 SELECT DISTINCT 
 	pf.in_year
 	, pf2.in_year
-	, ROUND(AVG(pf.avg_price_year),2) AS avg_price_all
-	, ROUND(AVG(pf2.avg_price_year),2) AS avg_price_all
-	, ROUND(AVG(pf.avg_payroll_year)) AS avg_payroll_all
-	, ROUND(AVG(pf2.avg_payroll_year)) AS avg_payroll_all
-	, ROUND(AVG(pf2.avg_price_year) / AVG(pf.avg_price_year) *100 -100,2) AS price_percentage
-	, ROUND(AVG(pf2.avg_payroll_year) / AVG(pf.avg_payroll_year) *100 -100,2) AS payroll_percentage
+	, round(avg(pf.avg_price_year),2) AS avg_price_all
+	, round(avg(pf2.avg_price_year),2) AS avg_price_all
+	, round(avg(pf.avg_payroll_year)) AS avg_payroll_all
+	, round(avg(pf2.avg_payroll_year)) AS avg_payroll_all
+	, round(avg(pf2.avg_price_year) / avg(pf.avg_price_year) * 100 - 100,2) AS price_percentage
+	, round(avg(pf2.avg_payroll_year) / avg(pf.avg_payroll_year) * 100 - 100,2) AS payroll_percentage
 FROM t_lucie_fridrichova_project_sql_primary_final pf 
 JOIN t_lucie_fridrichova_project_sql_primary_final pf2
-	ON pf.in_year = pf2.in_year -1
+	ON pf.in_year = pf2.in_year - 1
 	AND pf.category_code = pf2.category_code
 GROUP BY pf.in_year;

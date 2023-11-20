@@ -11,11 +11,11 @@ CREATE OR REPLACE VIEW v_lucie_fridrichova_price_payroll AS
 	SELECT DISTINCT 
 		pf.in_year AS FIRST_year_pp
 		, pf2.in_year AS NEXT_year_pp
-		, ROUND(AVG(pf2.avg_price_year) / AVG(pf.avg_price_year) *100 -100,2) AS price_percentage
-		, ROUND(AVG(pf2.avg_payroll_year) / AVG(pf.avg_payroll_year) *100 -100,2) AS payroll_percentage
+		, round(avg(pf2.avg_price_year) / avg(pf.avg_price_year) * 100 - 100,2) AS price_percentage
+		, round(avg(pf2.avg_payroll_year) / avg(pf.avg_payroll_year) * 100 - 100,2) AS payroll_percentage
 	FROM t_lucie_fridrichova_project_sql_primary_final pf 
 	JOIN t_lucie_fridrichova_project_sql_primary_final pf2
-		ON pf.in_year = pf2.in_year -1
+		ON pf.in_year = pf2.in_year - 1
 		AND pf.category_code = pf2.category_code
 	GROUP BY pf.in_year;
 
@@ -53,9 +53,9 @@ SELECT
 	, pp.NEXT_year_pp AS pp2_year
 	, pp.payroll_percentage AS payroll_diff
 	, pp.price_percentage AS price_diff
-	FROM v_lucie_fridrichova_gdp g
+FROM v_lucie_fridrichova_gdp g
 JOIN v_lucie_fridrichova_price_payroll pp
-	ON g.first_year_gdp = pp.first_year_pp -1
+	ON g.first_year_gdp = pp.first_year_pp - 1
 	AND g.next_year_gdp = pp.FIRST_year_pp;
 
 -- postup, pomocné, ostatní:

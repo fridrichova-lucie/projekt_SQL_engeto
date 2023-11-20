@@ -16,6 +16,8 @@ JOIN t_lucie_fridrichova_project_sql_primary_final pf2
 	ON pf.in_year = pf2.in_year -1
 	AND pf.ib_code = pf2.ib_code;
 
+SELECT round 
+
 -- VÝSLEDEK psaný:
 -- A = zemědělství, lesnictví, rybářství = mzdy klesly pouze v roce 2009 
 -- B = těžba a dobývání = mzdy klesly v letech 2009, 2013, 2014, 2016
