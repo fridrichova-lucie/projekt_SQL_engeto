@@ -11,8 +11,7 @@ JOIN t_lucie_fridrichova_project_sql_primary_final pf2
 	ON pf.in_year = pf2.in_year - 1
 	AND pf.category_code = pf2.category_code
 GROUP BY pf.category_code
-ORDER BY avg_percentage
-LIMIT 5;
+ORDER BY avg_percentage;
 
  
 
