@@ -31,10 +31,7 @@ WHERE in_year IN ('2006', '2018')
 GROUP BY in_year, ib_name, category_code
 ORDER BY ib_name, in_year;
 
-SELECT *
-FROM t_lucie_fridrichova_project_sql_primary_final tlfpspf 
-
--- ještě jsem si ověřila pro jaké hodnoty jsou uveden ceny
+-- ještě jsem si ověřila pro jaké hodnoty jsou uvedené ceny
 SELECT *
 FROM czechia_price_category cpc
 WHERE code IN ('114201', '111301');
