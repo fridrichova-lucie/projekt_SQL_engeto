@@ -1,8 +1,6 @@
 # projekt_SQL_engeto
 projekt_SQL_engeto
 
-Discord name: Lucie F.
-
 Odpovědi na otázky: 
 
 Sledované období je 2006 - 2018, kdy máme všechna potřebná data.
